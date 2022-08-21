@@ -1,12 +1,24 @@
 package com.exalt.springboot.domain.aggregate;
 
-public class User extends Base {
+public class User {
 
+    private long id;
     private String name;
     private String email;
-    private String password;
-    private Integer age;
-    private String[] tokens;
+
+    public User(String name, String email) {
+        this.id =0;
+        this.email=email;
+        this.name=name;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -24,27 +36,12 @@ public class User extends Base {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public String[] getTokens() {
-        return tokens;
-    }
-
-    public void setTokens(String[] tokens) {
-        this.tokens = tokens;
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

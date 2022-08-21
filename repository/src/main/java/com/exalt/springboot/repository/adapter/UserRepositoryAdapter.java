@@ -41,11 +41,6 @@ public class UserRepositoryAdapter implements IUserRepository {
         userJpaRepository.deleteById(id);
     }
 
-    @Override
-    public User getByCredentials(String email, String password) {
-        return null;
-    }
-
     private UserEntity convertToEntity(User user){
         return modelMapper.map(user, UserEntity.class);
     }

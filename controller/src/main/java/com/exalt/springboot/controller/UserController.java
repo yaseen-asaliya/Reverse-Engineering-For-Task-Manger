@@ -4,7 +4,6 @@ import com.exalt.springboot.domain.aggregate.User;
 import com.exalt.springboot.domain.service.IUserService;
 
 import com.exalt.springboot.dto.UserDTO;
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +20,16 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    @GetMapping()
+    public ResponseEntity test() {
+        return ResponseEntity.status(HttpStatus.CREATED).body("test");
+    }
 
     @PostMapping()
     public ResponseEntity add(@RequestBody UserDTO userDTO){
         try {
-            User user = modelMapper.map(userDTO, User.class);
+            User user = new User(userDTO.getName(),userDTO.getEmail());
+            System.out.println(user);
             return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
         } catch (Exception ex){
             LOGGER.error("An error occurred during saving a new user, {}", ex);

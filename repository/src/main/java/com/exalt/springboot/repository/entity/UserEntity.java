@@ -5,21 +5,23 @@ import javax.persistence.*;
 @Entity
 @Table(name = "user")
 //TODO: password hashing
-public class UserEntity extends BaseEntity {
+public class UserEntity {
 
-    @Column(nullable = false)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String name;
 
-    @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
-    private String password;
+    public Long getId() {
+        return id;
+    }
 
-    private Integer age;
-
-    @Column(length = 3000)
-    private String tokens;
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -35,29 +37,5 @@ public class UserEntity extends BaseEntity {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public String getTokens() {
-        return tokens;
-    }
-
-    public void setTokens(String tokens) {
-        this.tokens = tokens;
     }
 }

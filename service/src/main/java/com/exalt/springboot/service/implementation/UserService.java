@@ -35,9 +35,4 @@ public class UserService implements IUserService {
         userRepository.deleteByID(id);
     }
 
-    @Override
-    public User getByCredentials(String email, String password) {
-        LOGGER.debug("Getting the user with the email equal to {}", email);
-        return userRepository.getByCredentials(email, password);
-    }
 }
