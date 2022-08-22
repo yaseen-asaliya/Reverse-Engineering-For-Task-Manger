@@ -2,21 +2,27 @@ package com.exalt.springboot.domain.aggregate;
 
 public class User {
 
-    private long id;
+    private int id;
     private String name;
+    private String password;
     private String email;
+    private String username;
+    private boolean isSignout;
 
-    public User(String name, String email) {
-        this.id =0;
-        this.email=email;
-        this.name=name;
+    public User(String name, String password, String email, String username) {
+        this.id = 0;
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.username = username;
+        this.isSignout = false;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -28,6 +34,14 @@ public class User {
         this.name = name;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -36,12 +50,31 @@ public class User {
         this.email = email;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public boolean isSignout() {
+        return isSignout;
+    }
+
+    public void setSignout(boolean signout) {
+        isSignout = signout;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", isSignout=" + isSignout +
                 '}';
     }
 }

@@ -1,25 +1,42 @@
 package com.exalt.springboot.repository.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
-//TODO: password hashing
 public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    private int id;
     private String name;
-
+    private String password;
     private String email;
+    private String username;
+    @Column(name = "is_signout")
+    private boolean isSignout;
 
-    public Long getId() {
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<TaskEntity> tasks;
+
+    public UserEntity() {
+    }
+
+    public UserEntity(String name, String password, String email, String username) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.username = username;
+        this.isSignout= true;
+    }
+
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -31,11 +48,47 @@ public class UserEntity {
         this.name = name;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public boolean getSignout() {
+        return isSignout;
+    }
+
+    public void setSignout(boolean signout) {
+        isSignout = signout;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", signout='" + isSignout + '\'' +
+                '}';
     }
 }

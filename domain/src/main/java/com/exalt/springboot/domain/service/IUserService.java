@@ -4,8 +4,10 @@ import com.exalt.springboot.domain.aggregate.User;
 
 public interface IUserService {
 
-    User save(User user);
-    User update(User user);
-    void deleteByID(Long id);
+    User findById(int id);
+
+    String saveObject(User user);
+
+    String deleteById(int userId);
 
 }
