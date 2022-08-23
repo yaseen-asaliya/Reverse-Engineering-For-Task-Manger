@@ -4,9 +4,11 @@ import com.exalt.springboot.domain.aggregate.Task;
 import com.exalt.springboot.domain.repository.ITaskRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class TaskRepositoryAdapter implements ITaskRepository {
 
     @Override
@@ -26,6 +28,16 @@ public class TaskRepositoryAdapter implements ITaskRepository {
 
     @Override
     public List<Task> getTasks(int userId) {
+        return null;
+    }
+
+    @Override
+    public List<Task> findTasksByUserId(int userId) {
+        return null;
+    }
+
+    @Override
+    public Page<Task> findTasksByUserIdWithPagination(int userId, Pageable pageable) {
         return null;
     }
 

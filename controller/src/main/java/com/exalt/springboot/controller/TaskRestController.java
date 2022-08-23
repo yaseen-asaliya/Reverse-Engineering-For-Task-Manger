@@ -7,6 +7,7 @@ import com.exalt.springboot.domain.service.ITaskService;
 import com.exalt.springboot.dto.TaskDTO;
 import com.exalt.springboot.repository.jpa.ITaskJpaRepository;
 import com.exalt.springboot.repository.jpa.IUserJpaRepository;
+import com.exalt.springboot.security.jwt.AuthTokenFilter;
 import com.exalt.springboot.service.implementation.TaskServiceImplementation;
 import com.exalt.springboot.timeconflict.TimeConflict;
 
@@ -41,8 +42,8 @@ public class TaskRestController {
     @Autowired
     private ITaskJpaRepository taskRepository;
 
-    //@Autowired
-    //private AuthTokenFilter authTokenFilter;
+    @Autowired
+    private AuthTokenFilter authTokenFilter;
 
     @Autowired
     private TaskServiceImplementation taskServiceImplementation;
@@ -78,7 +79,7 @@ public class TaskRestController {
     public String addTask(@RequestBody TaskDTO task)  {
         checkIfLogin();
         checkConflict(task);
-        int userId = 1; //authTokenFilter.getUserId();
+        int userId = authTokenFilter.getUserId();
         Optional<User> optionalUser = userRepository.findById(userId);
         task.setUser(optionalUser.get());
         taskService.saveObject(task);
@@ -91,7 +92,7 @@ public class TaskRestController {
     public String updateTask(@RequestBody TaskDTO task){
         checkIfLogin();
         checkConflict(task);
-        int userId = 1;//authTokenFilter.getUserId();
+        int userId = authTokenFilter.getUserId();
         Optional<Task> optionalTask = taskRepository.findById(task.getId());
 
         if(!optionalTask.isPresent()){
@@ -115,7 +116,7 @@ public class TaskRestController {
     @DeleteMapping("/tasks/{taskId}")
     public String deleteTask(@PathVariable int taskId){
         checkIfLogin();
-        int userId = 1;//authTokenFilter.getUserId();
+        int userId = authTokenFilter.getUserId();
         Task tempTask = (Task) taskService.findById(taskId);
         if(tempTask == null){
             LOGGER.warn("Wrong user id passed");

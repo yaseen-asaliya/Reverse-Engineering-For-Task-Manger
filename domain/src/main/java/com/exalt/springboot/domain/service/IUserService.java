@@ -4,7 +4,7 @@ import com.exalt.springboot.domain.aggregate.User;
 
 public interface IUserService {
 
-    User findById(int id);
+    User findById(int userId);
 
     String saveObject(User user);
 

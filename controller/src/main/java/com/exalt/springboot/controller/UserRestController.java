@@ -2,19 +2,13 @@ package com.exalt.springboot.controller;
 
 import com.exalt.springboot.domain.aggregate.User;
 import com.exalt.springboot.domain.exception.NotFoundException;
-import com.exalt.springboot.domain.service.ITaskService;
 import com.exalt.springboot.domain.service.IUserService;
 import com.exalt.springboot.dto.UserDTO;
 import com.exalt.springboot.repository.jpa.IUserJpaRepository;
-import com.training.taskmanger.entity.User;
-import com.training.taskmanger.exception.NotFoundException;
-import com.training.taskmanger.repository.UserRepository;
-import com.training.taskmanger.security.jwt.AuthTokenFilter;
-import com.training.taskmanger.service.Services;
+import com.exalt.springboot.security.jwt.AuthTokenFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +22,8 @@ public class UserRestController {
     private IUserService userService;
     @Autowired
     PasswordEncoder encoder;
-    //@Autowired
-    //private AuthTokenFilter authTokenFilter;
+    @Autowired
+    private AuthTokenFilter authTokenFilter;
 
     @Autowired
     private IUserJpaRepository userRepository;
@@ -44,15 +38,15 @@ public class UserRestController {
     @GetMapping("/user")
     public User getCurrentUser(){
         checkIfLogin();
-        int userId = 1;//authTokenFilter.getUserId();
-        return (User) userService.findById(userId);
+        int userId = authTokenFilter.getUserId();
+        return userService.findById(userId);
     }
 
     // Update current user information
     @PutMapping("/user")
     public String updateUser(@RequestBody UserDTO user){
         checkIfLogin();
-        int userId = 1;//authTokenFilter.getUserId();
+        int userId = authTokenFilter.getUserId();
         user.setPassword(encoder.encode(user.getPassword()));
         user.setId(userId);
         userService.saveObject(user);
@@ -64,7 +58,7 @@ public class UserRestController {
     @DeleteMapping("/user")
     public String deleteUser(){
         checkIfLogin();
-        int userId = 1;//authTokenFilter.getUserId();
+        int userId = authTokenFilter.getUserId();
         User tempUser = (User)userService.findById(userId);
         userService.deleteById(userId);
         LOGGER.debug("User deleted completed.");
@@ -84,7 +78,7 @@ public class UserRestController {
     }
 
     private boolean isSignout() {
-        int userId = 1;//authTokenFilter.getUserId();
+        int userId = authTokenFilter.getUserId();
         Optional<User> user = userRepository.findById(userId);
         if (user == null) {
             throw new NotFoundException("User not found");

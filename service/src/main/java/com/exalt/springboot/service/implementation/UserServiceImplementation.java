@@ -5,6 +5,7 @@ import com.exalt.springboot.domain.exception.NotFoundException;
 import com.exalt.springboot.domain.repository.IUserRepository;
 import com.exalt.springboot.domain.service.IUserService;
 import com.exalt.springboot.repository.adapter.UserRepositoryAdapter;
+import com.exalt.springboot.repository.jpa.IUserJpaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,15 +19,17 @@ import java.util.Optional;
 @Service
 public class UserServiceImplementation implements IUserService,UserDetailsService {
     public final Logger LOGGER = LoggerFactory.getLogger(UserServiceImplementation.class.getName());
-    private UserRepositoryAdapter userRepository;
+    private IUserRepository userRepository;
 
-    public UserServiceImplementation(UserRepositoryAdapter userRepository) {
-        this.userRepository = userRepository;
+    private IUserJpaRepository iUserJpaRepository;
+
+    public UserServiceImplementation(UserRepositoryAdapter userRepositoryAdapter) {
+        this.userRepository = userRepositoryAdapter;
     }
 
     @Override
     public User findById(int userId) {
-        Optional<User> result = userRepository.findById(userId);
+        Optional<User> result = Optional.ofNullable(userRepository.findById(userId));
 
         User user = null;
         if (result.isPresent()) {
@@ -41,7 +44,7 @@ public class UserServiceImplementation implements IUserService,UserDetailsServic
 
     @Override
     public String saveObject(User user) {
-        userRepository.save(user);
+        userRepository.saveObject(user);
         return "User saved";
     }
 
@@ -54,7 +57,7 @@ public class UserServiceImplementation implements IUserService,UserDetailsServic
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
+        User user = iUserJpaRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
 
         return UserDetailsImpl.build(user);
