@@ -4,8 +4,10 @@ import com.exalt.springboot.domain.aggregate.User;
 import com.exalt.springboot.domain.exception.NotFoundException;
 import com.exalt.springboot.domain.service.IUserService;
 import com.exalt.springboot.dto.UserDTO;
+import com.exalt.springboot.repository.entity.UserEntity;
 import com.exalt.springboot.repository.jpa.IUserJpaRepository;
 import com.exalt.springboot.security.jwt.AuthTokenFilter;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class UserRestController {
     private IUserJpaRepository userRepository;
 
     @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
     public UserRestController(IUserService userService) {
         this.userService = userService;
         LOGGER.info("User Controller created successfully");
@@ -44,8 +49,9 @@ public class UserRestController {
 
     // Update current user information
     @PutMapping("/user")
-    public String updateUser(@RequestBody UserDTO user){
+    public String updateUser(@RequestBody UserDTO userDTO){
         checkIfLogin();
+        User user = convertToModel(userDTO);
         int userId = authTokenFilter.getUserId();
         user.setPassword(encoder.encode(user.getPassword()));
         user.setId(userId);
@@ -79,11 +85,11 @@ public class UserRestController {
 
     private boolean isSignout() {
         int userId = authTokenFilter.getUserId();
-        Optional<User> user = userRepository.findById(userId);
+        Optional<User> user = convertToModel(userRepository.findById(userId).get());
         if (user == null) {
             throw new NotFoundException("User not found");
         }
-        if (user.get().getSignout()) {
+        if (user.get().isSignout()) {
             return true;
         }
         return false;
@@ -93,5 +99,13 @@ public class UserRestController {
         if(isSignout()){
             throw new RuntimeException("You're unauthorized");
         }
+    }
+
+    private Optional<User> convertToModel(UserEntity userEntity){
+        return Optional.ofNullable(modelMapper.map(userEntity, User.class));
+    }
+
+    private User convertToModel(UserDTO userDto){
+        return modelMapper.map(userDto, User.class);
     }
 }

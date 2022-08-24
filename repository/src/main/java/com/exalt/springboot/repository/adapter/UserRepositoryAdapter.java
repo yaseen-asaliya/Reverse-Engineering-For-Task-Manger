@@ -5,15 +5,11 @@ import com.exalt.springboot.domain.exception.NotFoundException;
 import com.exalt.springboot.domain.repository.IUserRepository;
 import com.exalt.springboot.repository.entity.UserEntity;
 import com.exalt.springboot.repository.jpa.IUserJpaRepository;
-import com.exalt.springboot.service.implementation.UserDetailsImpl;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 

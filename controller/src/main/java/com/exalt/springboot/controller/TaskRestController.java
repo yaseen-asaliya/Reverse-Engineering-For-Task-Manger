@@ -5,12 +5,15 @@ import com.exalt.springboot.domain.aggregate.User;
 import com.exalt.springboot.domain.exception.NotFoundException;
 import com.exalt.springboot.domain.service.ITaskService;
 import com.exalt.springboot.dto.TaskDTO;
+import com.exalt.springboot.repository.entity.TaskEntity;
+import com.exalt.springboot.repository.entity.UserEntity;
 import com.exalt.springboot.repository.jpa.ITaskJpaRepository;
 import com.exalt.springboot.repository.jpa.IUserJpaRepository;
 import com.exalt.springboot.security.jwt.AuthTokenFilter;
 import com.exalt.springboot.service.implementation.TaskServiceImplementation;
 import com.exalt.springboot.timeconflict.TimeConflict;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +52,9 @@ public class TaskRestController {
     private TaskServiceImplementation taskServiceImplementation;
 
     @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
     public TaskRestController(ITaskService taskService) {
         this.taskService = taskService;
         LOGGER.info("Task Controller created successfully");
@@ -63,7 +69,7 @@ public class TaskRestController {
             @RequestParam Optional<String> sortDirection
     ) {
         checkIfLogin();
-        int userId = 1; //authTokenFilter.getUserId();
+        int userId = authTokenFilter.getUserId();
         if(taskService.getTasks(userId).size() == EMPTY_LIST){
             throw new NotFoundException("No tasks available");
         }
@@ -76,11 +82,12 @@ public class TaskRestController {
 
     // Add task for current user
     @PostMapping("/tasks")
-    public String addTask(@RequestBody TaskDTO task)  {
+    public String addTask(@RequestBody TaskDTO taskDTO)  {
         checkIfLogin();
+        Task task = convertToModel(taskDTO);
         checkConflict(task);
         int userId = authTokenFilter.getUserId();
-        Optional<User> optionalUser = userRepository.findById(userId);
+        Optional<User> optionalUser = Optional.ofNullable(convertToModel(userRepository.findById(userId).get()));
         task.setUser(optionalUser.get());
         taskService.saveObject(task);
         LOGGER.debug("Task has been posted.");
@@ -89,17 +96,18 @@ public class TaskRestController {
 
     // Update tasks for current user
     @PutMapping("/tasks")
-    public String updateTask(@RequestBody TaskDTO task){
+    public String updateTask(@RequestBody TaskDTO taskDTO){
         checkIfLogin();
+        Task task = convertToModel(taskDTO);
         checkConflict(task);
         int userId = authTokenFilter.getUserId();
-        Optional<Task> optionalTask = taskRepository.findById(task.getId());
+        Optional<Task> optionalTask = Optional.ofNullable(convertToModel(taskRepository.findById(task.getId()).get()));
 
         if(!optionalTask.isPresent()){
             throw new NotFoundException("Task with id -" + task.getId() + "- not found.");
         }
 
-        Optional<User> optionalUser = userRepository.findById(userId);
+        Optional<User> optionalUser = Optional.ofNullable(convertToModel(userRepository.findById(userId).get()));
 
         if(optionalTask.get().getUser().getId() != userId){
             throw new NotFoundException("This task is not belong to you.");
@@ -117,7 +125,7 @@ public class TaskRestController {
     public String deleteTask(@PathVariable int taskId){
         checkIfLogin();
         int userId = authTokenFilter.getUserId();
-        Task tempTask = (Task) taskService.findById(taskId);
+        Task tempTask = taskService.findById(taskId);
         if(tempTask == null){
             LOGGER.warn("Wrong user id passed");
             throw new NotFoundException("Task with id -" + taskId + "- not found.");
@@ -133,12 +141,12 @@ public class TaskRestController {
     }
 
     private boolean isSignout() {
-        int userId = 1;//authTokenFilter.getUserId();
-        Optional<User> user = userRepository.findById(userId);
+        int userId = authTokenFilter.getUserId();
+        Optional<User> user = Optional.ofNullable(convertToModel(userRepository.findById(userId).get()));
         if (user == null) {
             throw new NotFoundException("User not found");
         }
-        if (user.get().getSignout()) {
+        if (user.get().isSignout()) {
             return true;
         }
         return false;
@@ -152,7 +160,7 @@ public class TaskRestController {
 
     private void checkConflict(Task task) {
         try {
-            int userId = 1;//authTokenFilter.getUserId();
+            int userId = authTokenFilter.getUserId();
             TimeConflict timeConflict = new TimeConflict(taskServiceImplementation);
             if(timeConflict.isConflict(task.getStart(), task.getFinish(),userId,task.getId()) == true){
                 throw new RuntimeException("Conflict between tasks times.");
@@ -162,6 +170,7 @@ public class TaskRestController {
             throw new RuntimeException("Conflict between tasks times.");
         }
     }
+
     private Sort.Direction getDirection(Optional<String> sortDirection) {
         Sort.Direction sort;
         if(sortDirection.get().equals(ASCENDING_DIRECTION)){
@@ -174,5 +183,17 @@ public class TaskRestController {
             throw new NotFoundException("Wrong direction passed.");
         }
         return sort;
+    }
+
+    private Task convertToModel(TaskDTO taskDTO){
+        return modelMapper.map(taskDTO, Task.class);
+    }
+
+    private User convertToModel(UserEntity userEntity){
+        return modelMapper.map(userEntity, User.class);
+    }
+
+    private Task convertToModel(TaskEntity taskEntity){
+        return modelMapper.map(taskEntity, Task.class);
     }
 }

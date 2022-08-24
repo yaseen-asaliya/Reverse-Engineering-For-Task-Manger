@@ -75,7 +75,7 @@ public class AuthenticationController {
                          signUpRequest.getEmail(),
                          signUpRequest.getUsername());
 
-    userRepository.save(user);
+    userRepository.saveObject(user);
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
   }
   @PostMapping("/signout")
@@ -93,8 +93,8 @@ public class AuthenticationController {
 
   private void setLogoutStatus(boolean status) {
     int userId = authTokenFilter.getUserId();
-    Optional<User> user = userRepository.findById(userId);
+    Optional<User> user = Optional.ofNullable(userRepository.findById(userId));
     user.get().setSignout(status);
-    userRepository.save(user.get());
+    userRepository.saveObject(user.get());
   }
 }
