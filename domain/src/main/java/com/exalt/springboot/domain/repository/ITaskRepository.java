@@ -1,7 +1,6 @@
 package com.exalt.springboot.domain.repository;
 
 import com.exalt.springboot.domain.aggregate.Task;
-import com.exalt.springboot.repository.entity.TaskEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -16,9 +15,11 @@ public interface ITaskRepository {
 
     List<Task> getTasks(int userId);
 
+    Page<Task> getTasks(int userId, Pageable pageable);
+
     List<Task> findTasksByUserId(int userId);
 
     Page<Task> findTasksByUserIdWithPagination(int userId, Pageable pageable);
 
-    Page<Task> getTasks(int userId, Pageable pageable);
+
 }

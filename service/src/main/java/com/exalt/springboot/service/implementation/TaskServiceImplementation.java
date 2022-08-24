@@ -18,25 +18,25 @@ import java.util.Optional;
 public class TaskServiceImplementation implements ITaskService {
     public final Logger LOGGER = LoggerFactory.getLogger(TaskServiceImplementation.class.getName());
 
-    private ITaskRepository taskRepository;
+    private ITaskRepository ITaskRepository;
 
     public TaskServiceImplementation(TaskRepositoryAdapter taskRepositoryAdapter) {
-        this.taskRepository = taskRepositoryAdapter;
+        this.ITaskRepository = taskRepositoryAdapter;
     }
 
     @Override
     public List<Task> getTasks(int userId) {
-        return taskRepository.findTasksByUserId(userId);
+        return ITaskRepository.findTasksByUserId(userId);
     }
 
     @Override
     public Page<Task> getTasks(int userId, Pageable pageable) {
-        return taskRepository.findTasksByUserIdWithPagination(userId,pageable);
+        return ITaskRepository.findTasksByUserIdWithPagination(userId,pageable);
     }
 
     @Override
     public Task findById(int taskId) {
-        Optional<Task> result = Optional.ofNullable(taskRepository.findById(taskId));
+        Optional<Task> result = Optional.ofNullable(ITaskRepository.findById(taskId));
 
         Task tempTask = null;
         if(result.isPresent()){
@@ -52,13 +52,13 @@ public class TaskServiceImplementation implements ITaskService {
 
     @Override
     public String saveObject(Task task) {
-        taskRepository.saveObject(task);
+        ITaskRepository.saveObject(task);
         return "Task saved";
     }
 
     @Override
     public String deleteById(int taskId) {
-        taskRepository.deleteById(taskId);
+        ITaskRepository.deleteById(taskId);
         return "Task deleted";
     }
 }

@@ -1,9 +1,8 @@
 package com.exalt.springboot.domain.repository;
 
 import com.exalt.springboot.domain.aggregate.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 public interface IUserRepository {
 
@@ -13,6 +12,10 @@ public interface IUserRepository {
 
     String deleteById(int userId);
 
-    @Transactional
-    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+    Optional<User> findByUsername(String username);
+
+    Boolean existsByUsername(String username);
+
+    Boolean existsByEmail(String email);
+
 }

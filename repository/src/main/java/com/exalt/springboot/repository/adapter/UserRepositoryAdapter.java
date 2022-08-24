@@ -20,7 +20,7 @@ import java.util.Optional;
 @Component
 public class UserRepositoryAdapter implements IUserRepository {
 
-    public final Logger LOGGER = LoggerFactory.getLogger(UserRepositoryAdapter.class.getName());
+    public final Logger LOGGER = LoggerFactory.getLogger(UserRepositoryAdapter.class);
 
     @Autowired
     private IUserJpaRepository userJpaRepository;
@@ -57,13 +57,20 @@ public class UserRepositoryAdapter implements IUserRepository {
         userJpaRepository.deleteById(userId);
         return "User deleted";
     }
-    @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userJpaRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
 
-        return UserDetailsImpl.build(user);
+    @Override
+    public Optional<User> findByUsername(String username) {
+        return userJpaRepository.findByUsername(username);
+    }
+
+    @Override
+    public Boolean existsByUsername(String username) {
+        return userJpaRepository.existsByUsername(username);
+    }
+
+    @Override
+    public Boolean existsByEmail(String email) {
+        return userJpaRepository.existsByEmail(email);
     }
 
     private UserEntity convertToEntity(User user){

@@ -1,6 +1,6 @@
 package com.exalt.springboot.security.jwt;
 
-import com.training.taskmanger.service.UserDetailsImpl;
+import com.exalt.springboot.service.implementation.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
