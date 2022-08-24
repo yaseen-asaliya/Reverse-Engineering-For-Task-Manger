@@ -27,7 +27,8 @@ public class UserRepositoryAdapter implements IUserRepository {
     @Override
     public User findById(int userId) {
         Optional<UserEntity> temp = userJpaRepository.findById(userId);
-        Optional<User> result = Optional.ofNullable(convertToModel(temp.get()));
+
+        Optional<User> result = Optional.of(convertToModel(temp.get()));
 
         User user = null;
         if (result.isPresent()) {
@@ -74,7 +75,11 @@ public class UserRepositoryAdapter implements IUserRepository {
     }
 
     private User convertToModel(UserEntity userEntity){
-        return modelMapper.map(userEntity, User.class);
+        User user = new User(userEntity.getName(),
+                userEntity.getPassword(),
+                userEntity.getEmail(),
+                userEntity.getUsername());
+        return user;
     }
 
 }

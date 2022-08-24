@@ -42,6 +42,7 @@ public class AuthenticationController {
   @Autowired
   JwtUtils jwtUtils;
 
+  @Autowired
   AuthTokenFilter authTokenFilter;
 
   @PostMapping("/signin")
@@ -56,6 +57,7 @@ public class AuthenticationController {
     UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
     ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
     setLogoutStatus(false);
+
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
             .body(new MessageResponse("Login Successfully!!"));
   }
@@ -77,6 +79,7 @@ public class AuthenticationController {
     userRepository.saveObject(user);
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
   }
+
   @PostMapping("/signout")
   public ResponseEntity<?> logoutUser() {
     ResponseCookie cookie = jwtUtils.getCleanJwtCookie();

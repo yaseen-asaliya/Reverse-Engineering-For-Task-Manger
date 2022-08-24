@@ -24,6 +24,8 @@ public class UserRestController {
     private IUserService userService;
     @Autowired
     PasswordEncoder encoder;
+
+    @Autowired
     private AuthTokenFilter authTokenFilter;
 
     @Autowired

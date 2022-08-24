@@ -45,6 +45,7 @@ public class TaskRestController {
     @Autowired
     private ITaskJpaRepository taskRepository;
 
+    @Autowired
     private AuthTokenFilter authTokenFilter;
 
     @Autowired
