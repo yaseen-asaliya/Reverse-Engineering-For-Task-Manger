@@ -9,8 +9,8 @@ import com.exalt.springboot.repository.entity.TaskEntity;
 import com.exalt.springboot.repository.entity.UserEntity;
 import com.exalt.springboot.repository.jpa.ITaskJpaRepository;
 import com.exalt.springboot.repository.jpa.IUserJpaRepository;
-import com.exalt.springboot.security.jwt.AuthTokenFilter;
 import com.exalt.springboot.service.implementation.TaskServiceImplementation;
+import com.exalt.springboot.service.security.jwt.AuthTokenFilter;
 import com.exalt.springboot.timeconflict.TimeConflict;
 
 import org.modelmapper.ModelMapper;
@@ -45,7 +45,6 @@ public class TaskRestController {
     @Autowired
     private ITaskJpaRepository taskRepository;
 
-    @Autowired
     private AuthTokenFilter authTokenFilter;
 
     @Autowired

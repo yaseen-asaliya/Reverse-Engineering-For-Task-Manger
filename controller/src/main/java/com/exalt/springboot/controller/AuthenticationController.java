@@ -3,12 +3,12 @@ package com.exalt.springboot.controller;
 
 import com.exalt.springboot.domain.aggregate.User;
 import com.exalt.springboot.domain.repository.IUserRepository;
-import com.exalt.springboot.security.http.request.LoginRequest;
-import com.exalt.springboot.security.http.request.SignupRequest;
-import com.exalt.springboot.security.http.response.MessageResponse;
-import com.exalt.springboot.security.jwt.AuthTokenFilter;
-import com.exalt.springboot.security.jwt.JwtUtils;
 import com.exalt.springboot.service.implementation.UserDetailsImpl;
+import com.exalt.springboot.service.security.http.request.LoginRequest;
+import com.exalt.springboot.service.security.http.request.SignupRequest;
+import com.exalt.springboot.service.security.http.response.MessageResponse;
+import com.exalt.springboot.service.security.jwt.AuthTokenFilter;
+import com.exalt.springboot.service.security.jwt.JwtUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,6 @@ public class AuthenticationController {
   @Autowired
   JwtUtils jwtUtils;
 
-  @Autowired
   AuthTokenFilter authTokenFilter;
 
   @PostMapping("/signin")

@@ -6,7 +6,7 @@ import com.exalt.springboot.domain.service.IUserService;
 import com.exalt.springboot.dto.UserDTO;
 import com.exalt.springboot.repository.entity.UserEntity;
 import com.exalt.springboot.repository.jpa.IUserJpaRepository;
-import com.exalt.springboot.security.jwt.AuthTokenFilter;
+import com.exalt.springboot.service.security.jwt.AuthTokenFilter;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,6 @@ public class UserRestController {
     private IUserService userService;
     @Autowired
     PasswordEncoder encoder;
-    @Autowired
     private AuthTokenFilter authTokenFilter;
 
     @Autowired

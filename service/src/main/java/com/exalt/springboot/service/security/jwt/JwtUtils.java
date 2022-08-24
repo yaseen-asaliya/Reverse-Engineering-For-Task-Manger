@@ -1,4 +1,4 @@
-package com.exalt.springboot.security.jwt;
+package com.exalt.springboot.service.security.jwt;
 
 import com.exalt.springboot.service.implementation.UserDetailsImpl;
 import io.jsonwebtoken.*;
