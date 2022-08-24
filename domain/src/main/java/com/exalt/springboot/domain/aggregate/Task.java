@@ -8,11 +8,11 @@ public class Task {
     private int id = 0;
     private User user;
     private String description;
-    private int completed;
+    private boolean completed;
     private String start;
     private String finish;
 
-    public Task(User user, String description, int completed, String start, String finish) {
+    public Task(User user, String description, boolean completed, String start, String finish) {
         this.user = user;
         this.description = description;
         this.completed = completed;
@@ -44,11 +44,11 @@ public class Task {
         this.description = description;
     }
 
-    public int getCompleted() {
+    public boolean getCompleted() {
         return completed;
     }
 
-    public void setCompleted(int completed) {
+    public void setCompleted(boolean completed) {
         this.completed = completed;
     }
 

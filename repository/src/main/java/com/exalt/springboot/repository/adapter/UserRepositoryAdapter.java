@@ -75,7 +75,9 @@ public class UserRepositoryAdapter implements IUserRepository {
     }
 
     private User convertToModel(UserEntity userEntity){
-        User user = new User(userEntity.getName(),
+        User user = new User(
+                userEntity.getId(),
+                userEntity.getName(),
                 userEntity.getPassword(),
                 userEntity.getEmail(),
                 userEntity.getUsername());

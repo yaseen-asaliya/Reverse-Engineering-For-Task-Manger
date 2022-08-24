@@ -3,7 +3,7 @@ package com.exalt.springboot.dto;
 public class TaskDTO {
     private int id;
     private String description;
-    private String completed;
+    private boolean completed;
     private String start;
     private String finish;
 
@@ -23,11 +23,11 @@ public class TaskDTO {
         this.description = description;
     }
 
-    public String getCompleted() {
+    public boolean getCompleted() {
         return completed;
     }
 
-    public void setCompleted(String completed) {
+    public void setCompleted(boolean completed) {
         this.completed = completed;
     }
 

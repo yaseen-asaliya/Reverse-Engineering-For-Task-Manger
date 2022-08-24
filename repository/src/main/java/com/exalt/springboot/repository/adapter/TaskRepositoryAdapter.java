@@ -1,9 +1,11 @@
 package com.exalt.springboot.repository.adapter;
 
 import com.exalt.springboot.domain.aggregate.Task;
+import com.exalt.springboot.domain.aggregate.User;
 import com.exalt.springboot.domain.exception.NotFoundException;
 import com.exalt.springboot.domain.repository.ITaskRepository;
 import com.exalt.springboot.repository.entity.TaskEntity;
+import com.exalt.springboot.repository.entity.UserEntity;
 import com.exalt.springboot.repository.jpa.ITaskJpaRepository;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -46,7 +48,11 @@ public class TaskRepositoryAdapter implements ITaskRepository {
 
     @Override
     public String saveObject(Task task) {
-        iTaskJpaRepository.save(convertToEntity(task));
+        TaskEntity taskEntity = convertToEntity(task);
+        taskEntity.getUser().setSignout(false);
+        System.out.println(taskEntity);
+        System.out.println(task);
+        iTaskJpaRepository.save(taskEntity);
         return "Task saved";
     }
 
@@ -79,10 +85,27 @@ public class TaskRepositoryAdapter implements ITaskRepository {
     }
 
     private TaskEntity convertToEntity(Task task){
-        return modelMapper.map(task, TaskEntity.class);
+        return new TaskEntity(task.getId(),
+                convertToEntity(task.getUser()),
+                task.getDescription(),
+                task.getCompleted(),
+                task.getStart(),
+                task.getFinish());
+    }
+
+    private UserEntity convertToEntity(User user) {
+        return new UserEntity(user.getId(), user.getName(), user.getPassword(), user.getEmail(), user.getUsername());
+    }
+
+    private User convertToEntity(UserEntity userEntity) {
+        return new User(userEntity.getId(), userEntity.getName(), userEntity.getPassword(), userEntity.getEmail(), userEntity.getUsername());
     }
 
     private Task convertToModel(TaskEntity taskEntity){
-        return modelMapper.map(taskEntity, Task.class);
+        return new Task(convertToEntity(taskEntity.getUser()),
+                taskEntity.getDescription(),
+                taskEntity.getCompleted(),
+                taskEntity.getStart(),
+                taskEntity.getFinish());
     }
 }

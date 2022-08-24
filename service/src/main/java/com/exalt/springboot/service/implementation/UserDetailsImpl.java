@@ -23,7 +23,7 @@ public class UserDetailsImpl implements UserDetails {
 
   private static Collection<? extends GrantedAuthority> authorities;
 
-  public UserDetailsImpl(int id, String username, String email, String password, String name,
+  public UserDetailsImpl(int id, String username, String email, String password,String name,
                          Collection<? extends GrantedAuthority> authorities) {
     this.id = id;
     this.username = username;
@@ -34,12 +34,12 @@ public class UserDetailsImpl implements UserDetails {
   }
 
   public static UserDetailsImpl build(User user) {
-
+    System.out.println(user);
     return new UserDetailsImpl(
             user.getId(),
-        user.getUsername(), 
-        user.getEmail(),
-        user.getPassword(),
+            user.getUsername(),
+            user.getEmail(),
+            user.getPassword(),
             user.getName(),
             authorities);
   }
@@ -103,6 +103,6 @@ public class UserDetailsImpl implements UserDetails {
     boolean status = true;
     if(o==null)
       status = false;
-  return status;
+    return status;
   }
 }

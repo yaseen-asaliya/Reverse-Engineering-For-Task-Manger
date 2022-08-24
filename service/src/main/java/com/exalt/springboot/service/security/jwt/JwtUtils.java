@@ -45,7 +45,7 @@ public class JwtUtils {
   }
 
   public String generateTokenFromUsernameAndId(String username,int id) {
-    LOGGER.debug("generateTokenFromUsername :: Generating token from user name : " + username);
+    LOGGER.debug("generateTokenFromUsernameAndId :: Generating token from user name : " + username);
     return Jwts.builder()
             .setSubject(username)
             .setId(String.valueOf(id))
@@ -69,7 +69,7 @@ public class JwtUtils {
   }
 
   public String getIdFromJwtToken(String token) {
-    LOGGER.debug("getUserNameFromJwtToken :: Getting id from token..");
+    LOGGER.debug("getIdFromJwtToken :: Getting id from token..");
     return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getId();
   }
 

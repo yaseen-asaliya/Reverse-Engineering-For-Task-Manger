@@ -84,10 +84,10 @@ public class TaskRestController {
     @PostMapping("/tasks")
     public String addTask(@RequestBody TaskDTO taskDTO)  {
         checkIfLogin();
-        Task task = convertToModel(taskDTO);
-        checkConflict(task);
         int userId = authTokenFilter.getUserId();
-        Optional<User> optionalUser = Optional.ofNullable(convertToModel(userRepository.findById(userId).get()));
+        Optional<User> optionalUser = Optional.of(convertToModel(userRepository.findById(userId).get()));
+        Task task = convertToModel(taskDTO,optionalUser.get());
+        checkConflict(task);
         task.setUser(optionalUser.get());
         taskService.saveObject(task);
         LOGGER.debug("Task has been posted.");
@@ -98,16 +98,14 @@ public class TaskRestController {
     @PutMapping("/tasks")
     public String updateTask(@RequestBody TaskDTO taskDTO){
         checkIfLogin();
-        Task task = convertToModel(taskDTO);
-        checkConflict(task);
         int userId = authTokenFilter.getUserId();
-        Optional<Task> optionalTask = Optional.ofNullable(convertToModel(taskRepository.findById(task.getId()).get()));
-
-        if(!optionalTask.isPresent()){
-            throw new NotFoundException("Task with id -" + task.getId() + "- not found.");
-        }
-
         Optional<User> optionalUser = Optional.ofNullable(convertToModel(userRepository.findById(userId).get()));
+        Task task = convertToModel(taskDTO,optionalUser.get());
+        checkConflict(task);
+        Optional<Task> optionalTask = Optional.ofNullable(convertToModel(taskRepository.findById(task.getId()).get()));
+        if(!optionalTask.isPresent()){
+            throw new NotFoundException("Task with id -" + taskDTO.getId() + "- not found.");
+        }
 
         if(optionalTask.get().getUser().getId() != userId){
             throw new NotFoundException("This task is not belong to you.");
@@ -185,15 +183,27 @@ public class TaskRestController {
         return sort;
     }
 
-    private Task convertToModel(TaskDTO taskDTO){
-        return modelMapper.map(taskDTO, Task.class);
+    private Task convertToModel(TaskDTO taskDTO,User user) {
+        return new Task(user,
+                taskDTO.getDescription(),
+                taskDTO.getCompleted(),
+                taskDTO.getStart(),
+                taskDTO.getFinish());
     }
 
     private User convertToModel(UserEntity userEntity){
-        return modelMapper.map(userEntity, User.class);
+        return new User(userEntity.getId(),
+                userEntity.getName(),
+                userEntity.getPassword(),
+                userEntity.getEmail(),
+                userEntity.getUsername());
     }
 
     private Task convertToModel(TaskEntity taskEntity){
-        return modelMapper.map(taskEntity, Task.class);
+        return new Task(convertToModel(taskEntity.getUser()),
+                taskEntity.getDescription(),
+                taskEntity.getCompleted(),
+                taskEntity.getStart(),
+                taskEntity.getFinish());
     }
 }

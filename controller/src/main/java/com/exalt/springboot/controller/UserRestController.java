@@ -7,7 +7,6 @@ import com.exalt.springboot.dto.UserDTO;
 import com.exalt.springboot.repository.entity.UserEntity;
 import com.exalt.springboot.repository.jpa.IUserJpaRepository;
 import com.exalt.springboot.service.security.jwt.AuthTokenFilter;
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +29,6 @@ public class UserRestController {
 
     @Autowired
     private IUserJpaRepository userRepository;
-
-    @Autowired
-    private ModelMapper modelMapper;
 
     @Autowired
     public UserRestController(IUserService userService) {
@@ -103,10 +99,20 @@ public class UserRestController {
     }
 
     private Optional<User> convertToModel(UserEntity userEntity){
-        return Optional.ofNullable(modelMapper.map(userEntity, User.class));
+        User user = new User(userEntity.getId(),
+                userEntity.getName(),
+                userEntity.getPassword(),
+                userEntity.getEmail(),
+                userEntity.getUsername());
+        return Optional.ofNullable(user);
     }
 
     private User convertToModel(UserDTO userDto){
-        return modelMapper.map(userDto, User.class);
+        User user = new User(0,
+                userDto.getName(),
+                userDto.getPassword(),
+                userDto.getEmail(),
+                userDto.getUsername());
+        return user;
     }
 }

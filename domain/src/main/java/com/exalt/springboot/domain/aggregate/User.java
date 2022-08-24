@@ -9,8 +9,8 @@ public class User {
     private String username;
     private boolean isSignout;
 
-    public User(String name, String password, String email, String username) {
-        this.id = 0;
+    public User(int id,String name, String password, String email, String username) {
+        this.id = id;
         this.name = name;
         this.password = password;
         this.email = email;

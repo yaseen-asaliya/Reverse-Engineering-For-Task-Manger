@@ -20,13 +20,13 @@ public class TaskEntity {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private UserEntity user;
     private String description;
-    private int completed;
+    private boolean completed;
 
     private String start;
 
     private String finish;
 
-    public TaskEntity(int id, UserEntity user, String description, int completed, String start, String finish) {
+    public TaskEntity(int id, UserEntity user, String description, boolean completed, String start, String finish) {
         this.id = id;
         this.description = description;
         this.completed = completed;
@@ -63,11 +63,11 @@ public class TaskEntity {
         this.description = description;
     }
 
-    public int getCompleted() {
+    public boolean getCompleted() {
         return completed;
     }
 
-    public void setCompleted(int completed) {
+    public void setCompleted(boolean completed) {
         this.completed = completed;
     }
 
