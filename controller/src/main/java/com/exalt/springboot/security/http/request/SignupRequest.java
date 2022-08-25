@@ -1,4 +1,4 @@
-package com.exalt.springboot.service.security.http.request;
+package com.exalt.springboot.security.http.request;
 
  
 public class SignupRequest {

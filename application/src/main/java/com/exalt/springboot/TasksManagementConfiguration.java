@@ -1,6 +1,6 @@
 package com.exalt.springboot;
 
-import com.exalt.springboot.service.security.jwt.AuthTokenFilter;
+import com.exalt.springboot.security.jwt.AuthTokenFilter;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

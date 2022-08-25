@@ -1,8 +1,8 @@
-package com.exalt.springboot.service.security;
+package com.exalt.springboot.security;
 
+import com.exalt.springboot.security.jwt.AuthEntryPointJwt;
+import com.exalt.springboot.security.jwt.AuthTokenFilter;
 import com.exalt.springboot.service.implementation.UserServiceImplementation;
-import com.exalt.springboot.service.security.jwt.AuthEntryPointJwt;
-import com.exalt.springboot.service.security.jwt.AuthTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

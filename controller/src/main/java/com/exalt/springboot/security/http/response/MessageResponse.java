@@ -1,4 +1,4 @@
-package com.exalt.springboot.service.security.http.response;
+package com.exalt.springboot.security.http.response;
 
 public class MessageResponse {
 	private String message;

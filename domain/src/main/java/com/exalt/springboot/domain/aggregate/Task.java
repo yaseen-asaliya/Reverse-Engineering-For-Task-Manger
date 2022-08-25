@@ -1,8 +1,5 @@
 package com.exalt.springboot.domain.aggregate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class Task {
 
     private int id = 0;
