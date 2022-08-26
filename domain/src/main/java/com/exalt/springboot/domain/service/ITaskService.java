@@ -1,14 +1,21 @@
 package com.exalt.springboot.domain.service;
 
 import com.exalt.springboot.domain.aggregate.Task;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface ITaskService {
 
-    Task save(Task task);
-    Task update(Task task);
-    void deleteByID(Long id);
-    Task getByID(Long id);
-    List<Task> getTasks(Long pageSize, Long pageNumber);
+    Task findById(int id);
+
+    String saveObject(Task task);
+
+    String deleteById(int taskId);
+
+    List<Task> getTasks(int userId);
+
+    Page<Task> getTasks(int userId, Pageable pageable);
+
 }

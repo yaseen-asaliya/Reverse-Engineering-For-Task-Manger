@@ -1,17 +1,19 @@
 package com.exalt.springboot.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-import javax.validation.constraints.NotBlank;
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class TaskDTO extends BaseDTO {
-
-    @NotBlank(message = "description field can't be empty")
+public class TaskDTO {
+    private int id;
     private String description;
+    private boolean completed;
+    private String start;
+    private String finish;
 
-    @NotBlank(message = "completed field can't be empty")
-    private Boolean completed;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getDescription() {
         return description;
@@ -21,11 +23,27 @@ public class TaskDTO extends BaseDTO {
         this.description = description;
     }
 
-    public void setCompleted(Boolean completed) {
+    public boolean getCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
         this.completed = completed;
     }
 
-    public Boolean getCompleted() {
-        return completed;
+    public String getStart() {
+        return start;
+    }
+
+    public void setStart(String start) {
+        this.start = start;
+    }
+
+    public String getFinish() {
+        return finish;
+    }
+
+    public void setFinish(String finish) {
+        this.finish = finish;
     }
 }

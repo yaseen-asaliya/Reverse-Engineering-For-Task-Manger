@@ -1,6 +1,7 @@
 package com.exalt.springboot.repository.adapter;
 
 import com.exalt.springboot.domain.aggregate.User;
+import com.exalt.springboot.domain.exception.NotFoundException;
 import com.exalt.springboot.domain.repository.IUserRepository;
 import com.exalt.springboot.repository.entity.UserEntity;
 import com.exalt.springboot.repository.jpa.IUserJpaRepository;
@@ -10,10 +11,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class UserRepositoryAdapter implements IUserRepository {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserRepositoryAdapter.class);
+    public final Logger LOGGER = LoggerFactory.getLogger(UserRepositoryAdapter.class);
 
     @Autowired
     private IUserJpaRepository userJpaRepository;
@@ -22,28 +25,49 @@ public class UserRepositoryAdapter implements IUserRepository {
     private ModelMapper modelMapper;
 
     @Override
-    public User save(User user) {
+    public User findById(int userId) {
+        Optional<UserEntity> temp = userJpaRepository.findById(userId);
+
+        Optional<User> result = Optional.of(convertToModel(temp.get()));
+
+        User user = null;
+        if (result.isPresent()) {
+            user = result.get();
+        } else {
+            LOGGER.warn("Wrong id passed.");
+            throw new NotFoundException("User with id -" + userId + "- not found.");
+        }
+        LOGGER.debug("The User was token from database.");
+        return user;
+    }
+
+    @Override
+    public String saveObject(User user) {
         UserEntity userEntity = convertToEntity(user);
         LOGGER.debug("Saving a new user entity : {}", userEntity);
-        return convertToModel(userJpaRepository.save(userEntity));
+        userJpaRepository.save(userEntity);
+        return "User saved";
     }
 
     @Override
-    public User update(User user) {
-        UserEntity userEntity = convertToEntity(user);
-        LOGGER.debug("Updating a user entity : {}", userEntity);
-        return convertToModel(userJpaRepository.save(userEntity));
+    public String deleteById(int userId) {
+        userJpaRepository.deleteById(userId);
+        return "User deleted";
     }
 
     @Override
-    public void deleteByID(Long id) {
-        LOGGER.debug("Deleting the user entity with the id equal to {}", id);
-        userJpaRepository.deleteById(id);
+    public Optional<User> findByUsername(String username) {
+        return userJpaRepository.findByUsername(username);
     }
 
     @Override
-    public User getByCredentials(String email, String password) {
-        return null;
+    public Boolean existsByUsername(String username) {
+        return userJpaRepository.existsByUsername(username);
+    }
+
+    @Override
+    public Boolean existsByEmail(String email) {
+        return userJpaRepository.existsByEmail(email);
     }
 
     private UserEntity convertToEntity(User user){
@@ -51,6 +75,14 @@ public class UserRepositoryAdapter implements IUserRepository {
     }
 
     private User convertToModel(UserEntity userEntity){
-        return modelMapper.map(userEntity, User.class);
+        User user = new User(
+                userEntity.getId(),
+                userEntity.getName(),
+                userEntity.getPassword(),
+                userEntity.getEmail(),
+                userEntity.getUsername(),
+                userEntity.getSignout());
+        return user;
     }
+
 }

@@ -1,25 +1,45 @@
 package com.exalt.springboot.repository.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
-//TODO: password hashing
-public class UserEntity extends BaseEntity {
+public class UserEntity {
 
-    @Column(nullable = false)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private String name;
-
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    @Column(nullable = false)
     private String password;
+    private String email;
+    private String username;
+    @Column(name = "is_signout")
+    private boolean isSignout;
 
-    private Integer age;
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<TaskEntity> tasks;
 
-    @Column(length = 3000)
-    private String tokens;
+    public UserEntity() {
+    }
+
+    public UserEntity(int id,String name, String password, String email, String username) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.username = username;
+        this.isSignout= true;
+    }
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -27,14 +47,6 @@ public class UserEntity extends BaseEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getPassword() {
@@ -45,19 +57,39 @@ public class UserEntity extends BaseEntity {
         this.password = password;
     }
 
-    public Integer getAge() {
-        return age;
+    public String getEmail() {
+        return email;
     }
 
-    public void setAge(Integer age) {
-        this.age = age;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getTokens() {
-        return tokens;
+    public String getUsername() {
+        return username;
     }
 
-    public void setTokens(String tokens) {
-        this.tokens = tokens;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public boolean getSignout() {
+        return isSignout;
+    }
+
+    public void setSignout(boolean signout) {
+        isSignout = signout;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", signout='" + isSignout + '\'' +
+                '}';
     }
 }
