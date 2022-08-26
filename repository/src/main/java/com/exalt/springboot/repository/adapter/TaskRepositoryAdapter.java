@@ -81,13 +81,7 @@ public class TaskRepositoryAdapter implements ITaskRepository {
     }
 
     private TaskEntity convertToEntity(Task task) {
-        return new TaskEntity(task.getId(),
-                convertToEntity(task.getUser()),
-                task.getDescription(),
-                task.getCompleted(),
-                task.getStart(),
-                task.getFinish());
-        //return modelMapper.map(task,TaskEntity.class);
+        return modelMapper.map(task,TaskEntity.class);
     }
 
     private UserEntity convertToEntity(User user) {
@@ -99,11 +93,6 @@ public class TaskRepositoryAdapter implements ITaskRepository {
     }
 
     private Task convertToModel(TaskEntity taskEntity) {
-        return new Task(convertToEntity(taskEntity.getUser()),
-                taskEntity.getDescription(),
-                taskEntity.getCompleted(),
-                taskEntity.getStart(),
-                taskEntity.getFinish());
-        //return modelMapper.map(taskEntity,Task.class);
+        return modelMapper.map(taskEntity,Task.class);
     }
 }

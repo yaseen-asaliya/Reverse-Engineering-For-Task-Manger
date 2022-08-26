@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.Optional;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
@@ -160,12 +161,11 @@ public class TaskRestController {
         try {
             int userId = authTokenFilter.getUserId();
             TimeConflict timeConflict = new TimeConflict(taskServiceImplementation);
-            if(timeConflict.isConflict(task.getStart(), task.getFinish(),userId,task.getId()) == true){
+            if(timeConflict.isConflict(task.getStart(), task.getFinish(),userId,task.getId()) == true) {
                 throw new RuntimeException("Conflict between tasks times.");
             }
-        } catch (Exception exp){
-            exp.getStackTrace();
-            throw new RuntimeException("Error occur wile checking conflict.");
+        } catch (Exception exp) {
+            throw new RuntimeException("Error occur while checking conflict :: " + exp);
         }
     }
 
@@ -184,7 +184,8 @@ public class TaskRestController {
     }
 
     private Task convertToModel(TaskDTO taskDTO,User user) {
-        return new Task(user,
+        return new Task(0,
+                user,
                 taskDTO.getDescription(),
                 taskDTO.getCompleted(),
                 taskDTO.getStart(),
@@ -200,10 +201,6 @@ public class TaskRestController {
     }
 
     private Task convertToModel(TaskEntity taskEntity){
-        return new Task(convertToModel(taskEntity.getUser()),
-                taskEntity.getDescription(),
-                taskEntity.getCompleted(),
-                taskEntity.getStart(),
-                taskEntity.getFinish());
+        return  modelMapper.map(taskEntity,Task.class);
     }
 }

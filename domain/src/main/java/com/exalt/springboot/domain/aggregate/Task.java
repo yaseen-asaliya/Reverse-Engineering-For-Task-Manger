@@ -9,7 +9,12 @@ public class Task {
     private String start;
     private String finish;
 
-    public Task(User user, String description, boolean completed, String start, String finish) {
+    public Task() {
+
+    }
+
+    public Task(int taskId,User user, String description, boolean completed, String start, String finish) {
+        this.id = taskId;
         this.user = user;
         this.description = description;
         this.completed = completed;
