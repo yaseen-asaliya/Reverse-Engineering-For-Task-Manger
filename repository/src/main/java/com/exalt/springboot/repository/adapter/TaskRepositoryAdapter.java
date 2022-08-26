@@ -12,9 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -76,16 +78,20 @@ public class TaskRepositoryAdapter implements ITaskRepository {
 
     @Override
     public Page<Task> findTasksByUserIdWithPagination(int userId, Pageable pageable) {
-        return (Page<Task>) iTaskJpaRepository.findTasksByUserIdWithPagination(userId, pageable)
+        List<Task> tempListTasks = iTaskJpaRepository.findTasksByUserIdWithPagination(userId, pageable)
                 .stream().map(taskEntity -> convertToModel(taskEntity)).collect(Collectors.toList());
+        return convertToPage(tempListTasks,pageable);
+    }
+
+    public static<T> Page<T> convertToPage(List<T> objectList, Pageable pageable){
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start+pageable.getPageSize(),objectList.size());
+        List<T> subList = start>=end?new ArrayList<>():objectList.subList(start,end);
+        return new PageImpl<>(subList,pageable,objectList.size());
     }
 
     private TaskEntity convertToEntity(Task task) {
         return modelMapper.map(task,TaskEntity.class);
-    }
-
-    private UserEntity convertToEntity(User user) {
-        return new UserEntity(user.getId(), user.getName(), user.getPassword(), user.getEmail(), user.getUsername());
     }
 
     private User convertToEntity(UserEntity userEntity) {
