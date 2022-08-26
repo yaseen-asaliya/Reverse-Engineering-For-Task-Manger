@@ -165,7 +165,7 @@ public class TaskRestController {
             }
         } catch (Exception exp){
             exp.getStackTrace();
-            throw new RuntimeException("Conflict between tasks times.");
+            throw new RuntimeException("Error occur wile checking conflict.");
         }
     }
 

@@ -15,7 +15,7 @@ public class TaskEntity {
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER,
             cascade = {CascadeType.DETACH,CascadeType.MERGE,
-                    CascadeType.REFRESH,CascadeType.PERSIST})
+                    CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private UserEntity user;

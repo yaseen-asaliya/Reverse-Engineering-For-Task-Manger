@@ -48,11 +48,7 @@ public class TaskRepositoryAdapter implements ITaskRepository {
 
     @Override
     public String saveObject(Task task) {
-        TaskEntity taskEntity = convertToEntity(task);
-        taskEntity.getUser().setSignout(false);
-        System.out.println(taskEntity);
-        System.out.println(task);
-        iTaskJpaRepository.save(taskEntity);
+        iTaskJpaRepository.save(convertToEntity(task));
         return "Task saved";
     }
 
@@ -84,13 +80,14 @@ public class TaskRepositoryAdapter implements ITaskRepository {
                 .stream().map(taskEntity -> convertToModel(taskEntity)).collect(Collectors.toList());
     }
 
-    private TaskEntity convertToEntity(Task task){
+    private TaskEntity convertToEntity(Task task) {
         return new TaskEntity(task.getId(),
                 convertToEntity(task.getUser()),
                 task.getDescription(),
                 task.getCompleted(),
                 task.getStart(),
                 task.getFinish());
+        //return modelMapper.map(task,TaskEntity.class);
     }
 
     private UserEntity convertToEntity(User user) {
@@ -101,11 +98,12 @@ public class TaskRepositoryAdapter implements ITaskRepository {
         return new User(userEntity.getId(), userEntity.getName(), userEntity.getPassword(), userEntity.getEmail(), userEntity.getUsername());
     }
 
-    private Task convertToModel(TaskEntity taskEntity){
+    private Task convertToModel(TaskEntity taskEntity) {
         return new Task(convertToEntity(taskEntity.getUser()),
                 taskEntity.getDescription(),
                 taskEntity.getCompleted(),
                 taskEntity.getStart(),
                 taskEntity.getFinish());
+        //return modelMapper.map(taskEntity,Task.class);
     }
 }
