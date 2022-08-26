@@ -99,7 +99,8 @@ public class TaskRepositoryAdapter implements ITaskRepository {
                 userEntity.getName(),
                 userEntity.getPassword(),
                 userEntity.getEmail(),
-                userEntity.getUsername());
+                userEntity.getUsername(),
+                userEntity.getSignout());
     }
 
     private Task convertToModel(TaskEntity taskEntity) {

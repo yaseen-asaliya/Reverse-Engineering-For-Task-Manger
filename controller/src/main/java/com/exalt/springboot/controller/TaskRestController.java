@@ -141,7 +141,7 @@ public class TaskRestController {
 
     private boolean isSignout() {
         int userId = authTokenFilter.getUserId();
-        Optional<User> user = Optional.ofNullable(convertToModel(userRepository.findById(userId).get()));
+        Optional<User> user = Optional.of(convertToModel(userRepository.findById(userId).get()));
         if (user == null) {
             throw new NotFoundException("User not found");
         }
@@ -187,12 +187,13 @@ public class TaskRestController {
         return modelMapper.map(taskDTO,Task.class);
     }
 
-    private User convertToModel(UserEntity userEntity){
+    private User convertToModel(UserEntity userEntity) {
         return new User(userEntity.getId(),
                 userEntity.getName(),
                 userEntity.getPassword(),
                 userEntity.getEmail(),
-                userEntity.getUsername());
+                userEntity.getUsername(),
+                userEntity.getSignout());
     }
 
     private Task convertToModel(TaskEntity taskEntity) {

@@ -36,7 +36,7 @@ public class TaskServiceImplementation implements ITaskService {
 
     @Override
     public Task findById(int taskId) {
-        Optional<Task> result = Optional.ofNullable(ITaskRepository.findById(taskId));
+        Optional<Task> result = Optional.of(ITaskRepository.findById(taskId));
 
         Task tempTask = null;
         if(result.isPresent()){

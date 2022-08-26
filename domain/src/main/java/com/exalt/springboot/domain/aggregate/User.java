@@ -9,13 +9,13 @@ public class User {
     private String username;
     private boolean isSignout;
 
-    public User(int id,String name, String password, String email, String username) {
+    public User(int id,String name, String password, String email, String username,boolean isSignout) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.email = email;
         this.username = username;
-        this.isSignout = false;
+        this.isSignout = isSignout;
     }
 
     public int getId() {

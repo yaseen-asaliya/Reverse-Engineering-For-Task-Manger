@@ -82,7 +82,7 @@ public class UserRestController {
 
     private boolean isSignout() {
         int userId = authTokenFilter.getUserId();
-        Optional<User> user = convertToModel(userRepository.findById(userId).get());
+        Optional<User> user = Optional.of(convertToModel(userRepository.findById(userId).get()));
         if (user == null) {
             throw new NotFoundException("User not found");
         }
@@ -98,21 +98,21 @@ public class UserRestController {
         }
     }
 
-    private Optional<User> convertToModel(UserEntity userEntity){
-        User user = new User(userEntity.getId(),
+    private User convertToModel(UserEntity userEntity){
+        return new User(userEntity.getId(),
                 userEntity.getName(),
                 userEntity.getPassword(),
                 userEntity.getEmail(),
-                userEntity.getUsername());
-        return Optional.ofNullable(user);
+                userEntity.getUsername(),
+                userEntity.getSignout());
     }
 
     private User convertToModel(UserDTO userDto){
-        User user = new User(0,
+        return new User(0,
                 userDto.getName(),
                 userDto.getPassword(),
                 userDto.getEmail(),
-                userDto.getUsername());
-        return user;
+                userDto.getUsername(),
+                false);
     }
 }

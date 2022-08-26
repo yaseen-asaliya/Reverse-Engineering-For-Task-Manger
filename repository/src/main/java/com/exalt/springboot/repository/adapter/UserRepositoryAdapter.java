@@ -80,7 +80,8 @@ public class UserRepositoryAdapter implements IUserRepository {
                 userEntity.getName(),
                 userEntity.getPassword(),
                 userEntity.getEmail(),
-                userEntity.getUsername());
+                userEntity.getUsername(),
+                userEntity.getSignout());
         return user;
     }
 
