@@ -162,10 +162,12 @@ public class TaskRestController {
             int userId = authTokenFilter.getUserId();
             TimeConflict timeConflict = new TimeConflict(taskServiceImplementation);
             if(timeConflict.isConflict(task.getStart(), task.getFinish(),userId,task.getId()) == true) {
-                throw new RuntimeException("Conflict between tasks times.");
+                throw new RuntimeException();
             }
-        } catch (Exception exp) {
-            throw new RuntimeException("Error occur while checking conflict :: " + exp);
+        } catch (RuntimeException exp) {
+            throw new RuntimeException("Conflict between tasks times.");
+        } catch (ParseException e) {
+            throw new RuntimeException("Conflict between tasks times.");
         }
     }
 
