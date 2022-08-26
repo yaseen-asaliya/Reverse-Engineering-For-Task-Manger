@@ -87,7 +87,7 @@ public class TaskRestController {
         checkIfLogin();
         int userId = authTokenFilter.getUserId();
         Optional<User> optionalUser = Optional.of(convertToModel(userRepository.findById(userId).get()));
-        Task task = convertToModel(taskDTO,optionalUser.get());
+        Task task = convertToModel(taskDTO);
         checkConflict(task);
         task.setUser(optionalUser.get());
         taskService.saveObject(task);
@@ -101,7 +101,7 @@ public class TaskRestController {
         checkIfLogin();
         int userId = authTokenFilter.getUserId();
         Optional<User> optionalUser = Optional.ofNullable(convertToModel(userRepository.findById(userId).get()));
-        Task task = convertToModel(taskDTO,optionalUser.get());
+        Task task = convertToModel(taskDTO);
         checkConflict(task);
         Optional<Task> optionalTask = Optional.ofNullable(convertToModel(taskRepository.findById(task.getId()).get()));
         if(!optionalTask.isPresent()){
@@ -162,11 +162,9 @@ public class TaskRestController {
             int userId = authTokenFilter.getUserId();
             TimeConflict timeConflict = new TimeConflict(taskServiceImplementation);
             if(timeConflict.isConflict(task.getStart(), task.getFinish(),userId,task.getId()) == true) {
-                throw new RuntimeException();
+                throw new RuntimeException("Conflict between tasks times.");
             }
-        } catch (RuntimeException exp) {
-            throw new RuntimeException("Conflict between tasks times.");
-        } catch (ParseException e) {
+        } catch (Exception e) {
             throw new RuntimeException("Conflict between tasks times.");
         }
     }
@@ -185,13 +183,8 @@ public class TaskRestController {
         return sort;
     }
 
-    private Task convertToModel(TaskDTO taskDTO,User user) {
-        return new Task(0,
-                user,
-                taskDTO.getDescription(),
-                taskDTO.getCompleted(),
-                taskDTO.getStart(),
-                taskDTO.getFinish());
+    private Task convertToModel(TaskDTO taskDTO) {
+        return modelMapper.map(taskDTO,Task.class);
     }
 
     private User convertToModel(UserEntity userEntity){
@@ -202,7 +195,12 @@ public class TaskRestController {
                 userEntity.getUsername());
     }
 
-    private Task convertToModel(TaskEntity taskEntity){
-        return  modelMapper.map(taskEntity,Task.class);
+    private Task convertToModel(TaskEntity taskEntity) {
+        return new Task(taskEntity.getId(),
+                convertToModel(taskEntity.getUser()),
+                taskEntity.getDescription(),
+                taskEntity.getCompleted(),
+                taskEntity.getStart(),
+                taskEntity.getFinish());
     }
 }
