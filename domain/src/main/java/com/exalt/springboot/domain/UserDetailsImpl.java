@@ -1,4 +1,4 @@
-package com.exalt.springboot.service.implementation;
+package com.exalt.springboot.domain;
 
 import com.exalt.springboot.domain.aggregate.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -23,7 +23,7 @@ public class UserDetailsImpl implements UserDetails {
 
   private static Collection<? extends GrantedAuthority> authorities;
 
-  public UserDetailsImpl(int id, String username, String email, String password,String name,
+  public UserDetailsImpl(int id, String username, String email, String password, String name,
                          Collection<? extends GrantedAuthority> authorities) {
     this.id = id;
     this.username = username;

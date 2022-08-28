@@ -1,6 +1,6 @@
 package com.exalt.springboot.unittest.services;
 
-import com.exalt.springboot.service.implementation.UserDetailsImpl;
+import com.exalt.springboot.domain.UserDetailsImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.boot.test.context.SpringBootTest;

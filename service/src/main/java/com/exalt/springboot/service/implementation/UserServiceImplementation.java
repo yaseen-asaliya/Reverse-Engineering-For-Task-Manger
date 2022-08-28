@@ -1,5 +1,6 @@
 package com.exalt.springboot.service.implementation;
 
+import com.exalt.springboot.domain.UserDetailsImpl;
 import com.exalt.springboot.domain.aggregate.User;
 import com.exalt.springboot.domain.exception.NotFoundException;
 import com.exalt.springboot.domain.repository.IUserRepository;
@@ -49,6 +50,11 @@ public class UserServiceImplementation implements IUserService,UserDetailsServic
     public String deleteById(int userId) {
         iUserRepository.deleteById(userId);
         return "User deleted";
+    }
+
+    @Override
+    public void resetIsSignout() {
+
     }
 
     @Override

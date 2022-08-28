@@ -70,6 +70,11 @@ public class UserRepositoryAdapter implements IUserRepository {
         return userJpaRepository.existsByEmail(email);
     }
 
+    @Override
+    public void resetIsSignout() {
+        userJpaRepository.resetIsSignout();
+    }
+
     private UserEntity convertToEntity(User user){
         return modelMapper.map(user, UserEntity.class);
     }

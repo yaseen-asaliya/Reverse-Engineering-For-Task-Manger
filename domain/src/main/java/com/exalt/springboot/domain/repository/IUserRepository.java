@@ -18,4 +18,6 @@ public interface IUserRepository {
 
     Boolean existsByEmail(String email);
 
+    void resetIsSignout();
+
 }

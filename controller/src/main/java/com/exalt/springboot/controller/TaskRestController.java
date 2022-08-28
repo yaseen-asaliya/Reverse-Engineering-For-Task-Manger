@@ -4,13 +4,9 @@ import com.exalt.springboot.domain.aggregate.Task;
 import com.exalt.springboot.domain.aggregate.User;
 import com.exalt.springboot.domain.exception.NotFoundException;
 import com.exalt.springboot.domain.service.ITaskService;
+import com.exalt.springboot.domain.service.IUserService;
 import com.exalt.springboot.dto.TaskDTO;
-import com.exalt.springboot.repository.entity.TaskEntity;
-import com.exalt.springboot.repository.entity.UserEntity;
-import com.exalt.springboot.repository.jpa.ITaskJpaRepository;
-import com.exalt.springboot.repository.jpa.IUserJpaRepository;
 import com.exalt.springboot.security.jwt.AuthTokenFilter;
-import com.exalt.springboot.service.implementation.TaskServiceImplementation;
 import com.exalt.springboot.timeconflict.TimeConflict;
 
 import org.modelmapper.ModelMapper;
@@ -23,7 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
 import java.util.Optional;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
@@ -40,17 +35,15 @@ public class TaskRestController {
     private final int EMPTY_LIST = 0;
     private final int DEFAULT_PAGE_SIZE = 3;
     private ITaskService taskService;
-    @Autowired
-    private IUserJpaRepository userRepository;
 
     @Autowired
-    private ITaskJpaRepository taskRepository;
+    private IUserService userService;
 
     @Autowired
     private AuthTokenFilter authTokenFilter;
 
     @Autowired
-    private TaskServiceImplementation taskServiceImplementation;
+    private ITaskService taskServiceImplementation;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -86,7 +79,7 @@ public class TaskRestController {
     public String addTask(@RequestBody TaskDTO taskDTO)  {
         checkIfLogin();
         int userId = authTokenFilter.getUserId();
-        Optional<User> optionalUser = Optional.of(convertToModel(userRepository.findById(userId).get()));
+        Optional<User> optionalUser = Optional.of(userService.findById(userId));
         Task task = convertToModel(taskDTO);
         checkConflict(task);
         task.setUser(optionalUser.get());
@@ -100,10 +93,10 @@ public class TaskRestController {
     public String updateTask(@RequestBody TaskDTO taskDTO){
         checkIfLogin();
         int userId = authTokenFilter.getUserId();
-        Optional<User> optionalUser = Optional.ofNullable(convertToModel(userRepository.findById(userId).get()));
+        Optional<User> optionalUser = Optional.ofNullable(userService.findById(userId));
         Task task = convertToModel(taskDTO);
         checkConflict(task);
-        Optional<Task> optionalTask = Optional.ofNullable(convertToModel(taskRepository.findById(task.getId()).get()));
+        Optional<Task> optionalTask = Optional.ofNullable(taskService.findById(task.getId()));
         if(!optionalTask.isPresent()){
             throw new NotFoundException("Task with id -" + taskDTO.getId() + "- not found.");
         }
@@ -141,7 +134,7 @@ public class TaskRestController {
 
     private boolean isSignout() {
         int userId = authTokenFilter.getUserId();
-        Optional<User> user = Optional.of(convertToModel(userRepository.findById(userId).get()));
+        Optional<User> user = Optional.of(userService.findById(userId));
         if (user == null) {
             throw new NotFoundException("User not found");
         }
@@ -187,21 +180,4 @@ public class TaskRestController {
         return modelMapper.map(taskDTO,Task.class);
     }
 
-    private User convertToModel(UserEntity userEntity) {
-        return new User(userEntity.getId(),
-                userEntity.getName(),
-                userEntity.getPassword(),
-                userEntity.getEmail(),
-                userEntity.getUsername(),
-                userEntity.getSignout());
-    }
-
-    private Task convertToModel(TaskEntity taskEntity) {
-        return new Task(taskEntity.getId(),
-                convertToModel(taskEntity.getUser()),
-                taskEntity.getDescription(),
-                taskEntity.getCompleted(),
-                taskEntity.getStart(),
-                taskEntity.getFinish());
-    }
 }

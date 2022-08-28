@@ -4,8 +4,6 @@ import com.exalt.springboot.domain.aggregate.User;
 import com.exalt.springboot.domain.exception.NotFoundException;
 import com.exalt.springboot.domain.service.IUserService;
 import com.exalt.springboot.dto.UserDTO;
-import com.exalt.springboot.repository.entity.UserEntity;
-import com.exalt.springboot.repository.jpa.IUserJpaRepository;
 import com.exalt.springboot.security.jwt.AuthTokenFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +24,6 @@ public class UserRestController {
 
     @Autowired
     private AuthTokenFilter authTokenFilter;
-
-    @Autowired
-    private IUserJpaRepository userRepository;
 
     @Autowired
     public UserRestController(IUserService userService) {
@@ -72,7 +67,7 @@ public class UserRestController {
     public boolean resetIsSignoutColumn() {
         LOGGER.info("Reset all users to signout.");
         try{
-            userRepository.resetIsSignout();
+            userService.resetIsSignout();
             return true;
         } catch (Exception e){
             e.printStackTrace();
@@ -82,7 +77,7 @@ public class UserRestController {
 
     private boolean isSignout() {
         int userId = authTokenFilter.getUserId();
-        Optional<User> user = Optional.of(convertToModel(userRepository.findById(userId).get()));
+        Optional<User> user = Optional.of(userService.findById(userId));
         if (user == null) {
             throw new NotFoundException("User not found");
         }
@@ -96,15 +91,6 @@ public class UserRestController {
         if(isSignout()){
             throw new RuntimeException("You're unauthorized");
         }
-    }
-
-    private User convertToModel(UserEntity userEntity){
-        return new User(userEntity.getId(),
-                userEntity.getName(),
-                userEntity.getPassword(),
-                userEntity.getEmail(),
-                userEntity.getUsername(),
-                userEntity.getSignout());
     }
 
     private User convertToModel(UserDTO userDto){

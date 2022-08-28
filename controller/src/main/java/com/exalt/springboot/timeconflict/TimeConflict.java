@@ -1,7 +1,7 @@
 package com.exalt.springboot.timeconflict;
 
 import com.exalt.springboot.domain.aggregate.Task;
-import com.exalt.springboot.service.implementation.TaskServiceImplementation;
+import com.exalt.springboot.domain.service.ITaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,16 +15,16 @@ public class TimeConflict {
     private final int NOT_CONFLICT = 0;
     public final Logger LOGGER = LoggerFactory.getLogger(TimeConflict.class.getName());
 
-    private TaskServiceImplementation taskServiceImplementation;
+    private ITaskService iTaskService;
 
-    public TimeConflict(TaskServiceImplementation taskServiceImplementation) {
-        this.taskServiceImplementation = taskServiceImplementation;
+    public TimeConflict(ITaskService iTaskService) {
+        this.iTaskService = iTaskService;
     }
 
     public boolean isConflict(String start,String finish,int userId,int taskId) throws ParseException {
         LOGGER.info("Checking conflict...");
         boolean overlap = false;
-        List<Task> tasks = taskServiceImplementation.getTasks(userId);
+        List<Task> tasks = iTaskService.getTasks(userId);
         DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
         Date startDate = dateFormat.parse(start);
         Date endDate = dateFormat.parse(finish);
