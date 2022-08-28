@@ -12,20 +12,16 @@
     <artifactId>controller</artifactId>
 
     <dependencies>
+
         <dependency>
             <groupId>com.exalt.springboot</groupId>
             <artifactId>domain</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
-        </dependency>
 
         <dependency>
-            <groupId>com.sun.xml.security</groupId>
-            <artifactId>xml-security-impl</artifactId>
-            <version>1.0</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
         <dependency>
@@ -33,10 +29,6 @@
             <artifactId>jjwt</artifactId>
             <version>0.9.1</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
     </dependencies>
