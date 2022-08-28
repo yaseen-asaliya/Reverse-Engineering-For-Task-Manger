@@ -2,7 +2,6 @@ package com.exalt.springboot.security;
 
 import com.exalt.springboot.security.jwt.AuthEntryPointJwt;
 import com.exalt.springboot.security.jwt.AuthTokenFilter;
-import com.exalt.springboot.service.implementation.UserServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -22,7 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
     prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
-  UserServiceImplementation userServiceImplementation;
+  UserDetailsService userDetails;
 
   @Autowired
   private AuthEntryPointJwt unauthorizedHandler;
@@ -35,7 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-    authenticationManagerBuilder.userDetailsService(userServiceImplementation).passwordEncoder(passwordEncoder);
+    authenticationManagerBuilder.userDetailsService(userDetails).passwordEncoder(passwordEncoder);
   }
 
   @Bean

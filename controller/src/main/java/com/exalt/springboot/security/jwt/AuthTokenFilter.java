@@ -1,6 +1,6 @@
 package com.exalt.springboot.security.jwt;
 
-import com.exalt.springboot.service.implementation.UserServiceImplementation;
+import com.exalt.springboot.domain.service.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
   @Autowired
   private JwtUtils jwtUtils;
   @Autowired
-  private UserServiceImplementation userServiceImplementation;
+  private IUserService userService;
   private int userId;
 
   @Override
@@ -34,7 +34,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         userId = Integer.parseInt(jwtUtils.getIdFromJwtToken(jwt));
         LOGGER.info("doFilterInternal :: got username = " + username + " with id = " + userId + " from jwt.");
 
-        UserDetails userDetails = userServiceImplementation.loadUserByUsername(username);
+        UserDetails userDetails = userService.loadUserByUsername(username);
 
         UsernamePasswordAuthenticationToken authentication =
             new UsernamePasswordAuthenticationToken(userDetails,null,null);
