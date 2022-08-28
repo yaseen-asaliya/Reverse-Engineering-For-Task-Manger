@@ -34,7 +34,6 @@ public class TaskRestController {
     private final String DESCENDING_DIRECTION = "descending";
     private final int EMPTY_LIST = 0;
     private final int DEFAULT_PAGE_SIZE = 3;
-    private ITaskService taskService;
 
     @Autowired
     private IUserService userService;
@@ -43,7 +42,7 @@ public class TaskRestController {
     private AuthTokenFilter authTokenFilter;
 
     @Autowired
-    private ITaskService taskServiceImplementation;
+    private ITaskService taskService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -153,7 +152,7 @@ public class TaskRestController {
     private void checkConflict(Task task) {
         try {
             int userId = authTokenFilter.getUserId();
-            TimeConflict timeConflict = new TimeConflict(taskServiceImplementation);
+            TimeConflict timeConflict = new TimeConflict(taskService);
             if(timeConflict.isConflict(task.getStart(), task.getFinish(),userId,task.getId()) == true) {
                 throw new RuntimeException("Conflict between tasks times.");
             }
