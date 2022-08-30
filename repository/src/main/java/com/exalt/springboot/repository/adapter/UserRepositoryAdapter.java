@@ -24,6 +24,11 @@ public class UserRepositoryAdapter implements IUserRepository {
     @Autowired
     private ModelMapper modelMapper;
 
+    public UserRepositoryAdapter(IUserJpaRepository userJpaRepository, ModelMapper modelMapper) {
+        this.userJpaRepository = userJpaRepository;
+        this.modelMapper = modelMapper;
+    }
+
     @Override
     public User findById(int userId) {
         Optional<UserEntity> temp = userJpaRepository.findById(userId);

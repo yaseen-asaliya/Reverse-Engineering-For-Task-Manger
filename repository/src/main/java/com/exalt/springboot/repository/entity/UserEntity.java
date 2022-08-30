@@ -89,7 +89,7 @@ public class UserEntity {
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", username='" + username + '\'' +
-                ", signout='" + isSignout + '\'' +
+                ", isSignout=" + isSignout + '\'' +
                 '}';
     }
 }

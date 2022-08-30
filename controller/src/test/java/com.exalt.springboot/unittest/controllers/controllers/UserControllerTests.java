@@ -1,10 +1,8 @@
-package com.exalt.springboot.unittest.controllers;
+package com.exalt.springboot.unittest.controllers.controllers;
 
 import com.exalt.springboot.domain.aggregate.User;
 import com.exalt.springboot.domain.repository.IUserRepository;
-import com.exalt.springboot.repository.entity.UserEntity;
 import com.exalt.springboot.security.jwt.AuthTokenFilter;
-import com.exalt.springboot.service.implementation.UserServiceImplementation;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +20,7 @@ import static com.exalt.springboot.unittest.controllers.SignupTests.asJsonString
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

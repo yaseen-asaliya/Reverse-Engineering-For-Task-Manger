@@ -1,4 +1,4 @@
-package com.exalt.springboot.unittest.controllers;
+package com.exalt.springboot.unittest.controllers.controllers;
 
 import com.exalt.springboot.domain.aggregate.Task;
 import com.exalt.springboot.domain.aggregate.User;
@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.exalt.springboot.unittest.controllers.SignupTests.asJsonString;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;

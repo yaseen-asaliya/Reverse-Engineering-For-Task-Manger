@@ -1,4 +1,4 @@
-package com.exalt.springboot.unittest.controllers;
+package com.exalt.springboot.unittest.controllers.controllers;
 
 import com.exalt.springboot.domain.aggregate.User;
 import com.exalt.springboot.repository.jpa.IUserJpaRepository;
@@ -23,7 +23,8 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
