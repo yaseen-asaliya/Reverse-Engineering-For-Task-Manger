@@ -94,8 +94,8 @@ public class TaskEntity {
                 ", user=" + user +
                 ", description='" + description + '\'' +
                 ", completed=" + completed +
-                ", start=" + start +
-                ", finish=" + finish +
+                ", start='" + start + '\'' +
+                ", finish='" + finish + '\'' +
                 '}';
     }
 }

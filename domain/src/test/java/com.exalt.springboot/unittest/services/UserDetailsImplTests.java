@@ -3,12 +3,16 @@ package com.exalt.springboot.unittest.services;
 import com.exalt.springboot.domain.UserDetailsImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 
-@SpringBootTest
+@SpringBootConfiguration
+@ContextConfiguration
 public class UserDetailsImplTests {
-    @InjectMocks
-    UserDetailsImpl userDetails;
+    UserDetailsImpl userDetails = Mockito.mock(UserDetailsImpl.class);
 
     @Test
     void callGetters() {
