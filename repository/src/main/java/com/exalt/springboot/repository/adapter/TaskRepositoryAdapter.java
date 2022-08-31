@@ -32,6 +32,11 @@ public class TaskRepositoryAdapter implements ITaskRepository {
     @Autowired
     private ModelMapper modelMapper;
 
+    public TaskRepositoryAdapter(ITaskJpaRepository iTaskJpaRepository, ModelMapper modelMapper) {
+        this.iTaskJpaRepository = iTaskJpaRepository;
+        this.modelMapper = modelMapper;
+    }
+
     @Override
     public Task findById(int taskId) {
         Optional<Task> result = Optional.ofNullable(convertToModel(iTaskJpaRepository.findById(taskId).get()));
@@ -62,12 +67,12 @@ public class TaskRepositoryAdapter implements ITaskRepository {
 
     @Override
     public List<Task> getTasks(int userId) {
-        return this.findTasksByUserId(userId);
+        return findTasksByUserId(userId);
     }
 
     @Override
     public Page<Task> getTasks(int userId, Pageable pageable) {
-        return this.findTasksByUserIdWithPagination(userId,pageable);
+        return findTasksByUserIdWithPagination(userId,pageable);
     }
 
     @Override

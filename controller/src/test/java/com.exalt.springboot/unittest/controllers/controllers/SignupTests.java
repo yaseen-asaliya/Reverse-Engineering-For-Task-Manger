@@ -1,4 +1,4 @@
-package com.exalt.springboot.unittest.controllers;
+package com.exalt.springboot.unittest.controllers.controllers;
 
 import com.exalt.springboot.repository.jpa.IUserJpaRepository;
 import com.exalt.springboot.security.http.request.SignupRequest;

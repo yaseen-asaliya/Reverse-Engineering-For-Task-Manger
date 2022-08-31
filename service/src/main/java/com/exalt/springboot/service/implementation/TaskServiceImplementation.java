@@ -4,9 +4,9 @@ import com.exalt.springboot.domain.aggregate.Task;
 import com.exalt.springboot.domain.exception.NotFoundException;
 import com.exalt.springboot.domain.repository.ITaskRepository;
 import com.exalt.springboot.domain.service.ITaskService;
-import com.exalt.springboot.repository.adapter.TaskRepositoryAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,10 +18,11 @@ import java.util.Optional;
 public class TaskServiceImplementation implements ITaskService {
     public final Logger LOGGER = LoggerFactory.getLogger(TaskServiceImplementation.class.getName());
 
+    @Autowired
     private ITaskRepository ITaskRepository;
 
-    public TaskServiceImplementation(TaskRepositoryAdapter taskRepositoryAdapter) {
-        this.ITaskRepository = taskRepositoryAdapter;
+    public TaskServiceImplementation(ITaskRepository iTaskRepository) {
+        this.ITaskRepository = iTaskRepository;
     }
 
     @Override
@@ -42,7 +43,7 @@ public class TaskServiceImplementation implements ITaskService {
         if(result.isPresent()){
             tempTask = result.get();
         }
-        else{
+        else {
             LOGGER.warn("Wrong id passed.");
             throw new NotFoundException("Task with id -" + taskId + "- not found.");
         }
